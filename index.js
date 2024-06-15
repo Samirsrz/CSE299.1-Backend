@@ -503,7 +503,7 @@ app.put('/user-info/:id', async(req, res)=> {
         {
           $group:{
             _id: null,
-            total: {$num:'$price'}
+            total: {$sum:'$price'}
           }
         }
       ]).toArray();
