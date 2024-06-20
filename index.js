@@ -15,6 +15,8 @@ app.use(cors({
     origin: [
       'http://localhost:5173',
       'http://localhost:5174',
+      'https://blood-donation-45cc0.web.app',
+      'https://blood-donation-45cc0.firebaseapp.com'
     ],
     credentials: true
   }));
@@ -55,6 +57,10 @@ const client = new MongoClient(uri, {
   }
 });
 
+
+
+
+
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
@@ -74,7 +80,7 @@ async function run() {
         const user = req.body;
         const token =  jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {expiresIn:'365d'})
         res.cookie('token', token, {
-            httpOnly:false,
+            httpOnly: true,
             secure:true,
             sameSite: 'none'
         })
@@ -529,8 +535,8 @@ app.get('/donation-requst-count', async(req, res) => {
  //my donation count
  
 
-    await client.db("admin").command({ ping: 1 });
-    console.log("Pinged your deployment. You successfully connected to MongoDB!");
+    // await client.db("admin").command({ ping: 1 });
+    // console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
     // Ensures that the client will close when you finish/error
     // await client.close();
