@@ -15,8 +15,7 @@ app.use(cors({
     origin: [
       'http://localhost:5173',
       'http://localhost:5174',
-      'https://blood-donation-45cc0.web.app',
-      'https://blood-donation-45cc0.firebaseapp.com'
+     
     ],
     credentials: true
   }));
@@ -39,6 +38,10 @@ const verifyToken = async(req, res, next) => {
     })
         
 }
+
+
+
+
 app.post('/logout', async (req, res) => {
     const user = req.body;
     res.clearCookie('token', { maxAge: 0 }).send({ success: true })
@@ -90,12 +93,13 @@ async function run() {
 
 
 
-
 // Get User Info
 app.get('/user/:email', verifyToken, async(req, res) => {
   const email = req.params.email;
+  console.log(email);
    const result = await usersInfoCollection.findOne({email});
    res.send(result);
+   console.log(result);
 })
 
 
@@ -318,13 +322,13 @@ app.delete('/delete-blog/:id', async (req, res) => {
     res.send({ count });
   })
 
-   app.get('/user/:email', verifyToken, async(req, res) => {
+  //  app.get('/user/:email', verifyToken, async(req, res) => {
       
-    const email = req.params.email;
-    const result = await usersInfoCollection.findOne({email});
-    res.send(result);
+  //   const email = req.params.email;
+  //   const result = await usersInfoCollection.findOne({email});
+  //   res.send(result);
 
-   })
+  //  })
 
 
  //update user info
@@ -433,7 +437,7 @@ app.put('/user-info/:id', async(req, res)=> {
 
   })
 
-  app.put('/update-donation-info/:id', async(req, res) => { 
+  app.put('/update-donation-info/:id',verifyToken, async(req, res) => { 
    const updatedInfo = req.body;
    const donorID = req.params.id;
     const filter = {_id : new ObjectId(donorID)};
@@ -456,7 +460,7 @@ app.put('/user-info/:id', async(req, res)=> {
       }
     }
 
-    const result = await donationRequestCollection.updateOne(filter, updateUserRole, options)
+    const result = await donationRequestCollection.updateOne(filter, updateUserRole, option)
     res.send(result);
 
   })
@@ -479,7 +483,7 @@ app.put('/user-info/:id', async(req, res)=> {
 
         res.send({ paymentResult });
    })
-
+  
 
   //payment intent
   app.post('/create-payment-intent', async(req, res) => {
